@@ -66,8 +66,58 @@ body {
   gap: 16px;
 }
 
+.color-picker {
+  background: #ffe5f5;
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 2px dashed #ff9bd2;
+}
+
+.color-picker__label {
+  margin: 0 0 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.color-picker__options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 6px 0 rgba(255, 155, 210, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.color-option[data-color="#ff9fba"] {
+  background: #ffd0de;
+}
+
+.color-option[data-color="#8de0ff"] {
+  background: #c5f0ff;
+}
+
+.color-option[data-color="#c7b7ff"] {
+  background: #e2dcff;
+}
+
+.color-option.is-active {
+  border-color: #7b1f6f;
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(255, 155, 210, 0.4);
+}
+
 .clothing {
-  background: #ffe0f2;
+  background: var(--item-color, #ffe0f2);
   border-radius: 18px;
   padding: 18px;
   text-align: center;
@@ -75,14 +125,21 @@ body {
   border: 3px solid #ff9bd2;
   box-shadow: 0 8px 0 #ffb6de;
   position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .clothing--dress {
-  background: #ffd9ec;
+  --item-color: #ffd9ec;
 }
 
 .clothing--shoes {
-  background: #ffe9f7;
+  --item-color: #ffe9f7;
+}
+
+.clothing.is-selected {
+  border-color: #7b1f6f;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 rgba(255, 155, 210, 0.6);
 }
 
 .clothing__label {
@@ -227,7 +284,7 @@ body {
 }
 
 .dressed-item {
-  pointer-events: none;
+  pointer-events: auto;
   width: 100%;
   height: 100%;
   display: flex;
@@ -235,20 +292,19 @@ body {
   justify-content: center;
   font-weight: bold;
   color: #7b1f6f;
+  background: var(--item-color, #ffb4e1);
+  cursor: pointer;
 }
 
 .dressed-item.hat {
-  background: #ff8fce;
   border-radius: 40px 40px 20px 20px;
 }
 
 .dressed-item.dress {
-  background: #ff7eb3;
   border-radius: 30px;
 }
 
 .dressed-item.shoes {
-  background: #ffb4e1;
   border-radius: 20px;
 }
 
@@ -264,15 +320,56 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #b3f3ff 45%, #7ddcff 100%);
-  box-shadow: 0 0 12px rgba(125, 220, 255, 0.7);
-  opacity: 0.85;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #ffffff 0%,
+    color-mix(in srgb, var(--bubble-color, #b3f3ff) 30%, #ffffff 70%) 35%,
+    var(--bubble-color, #7ddcff) 100%
+  );
+  box-shadow: 0 0 12px color-mix(in srgb, var(--bubble-color, #7ddcff) 80%, #ffffff 20%);
+  opacity: 0.9;
   transition: transform 0.2s ease, opacity 0.2s ease;
+  animation: bubble-wobble 3s ease-in-out infinite;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  inset: 10% 20% auto auto;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  filter: blur(1px);
+}
+
+.bubble--sparkle {
+  animation: bubble-wobble 3s ease-in-out infinite, bubble-glimmer 2s ease-in-out infinite;
 }
 
 .bubble.pop {
   transform: scale(1.4);
   opacity: 0;
+}
+
+@keyframes bubble-wobble {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes bubble-glimmer {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
 }
 
 .status {

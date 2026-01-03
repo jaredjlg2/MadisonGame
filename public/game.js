@@ -3,15 +3,55 @@ const dropZones = document.querySelectorAll('.drop-zone');
 const statusText = document.getElementById('status');
 const bubbleLayer = document.getElementById('bubble-layer');
 const dollArm = document.getElementById('doll-arm');
+const colorOptions = document.querySelectorAll('.color-option');
 
 const dressed = new Set();
 let bubblesActive = false;
 let bubbleInterval = null;
 const bubbles = new Set();
+const itemColors = new Map();
+let selectedColor = colorOptions[0]?.dataset.color ?? '#ff9fba';
+let selectedItemType = null;
+
+function setActiveColor(option) {
+  colorOptions.forEach((button) => {
+    const isActive = button === option;
+    button.classList.toggle('is-active', isActive);
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+  selectedColor = option.dataset.color;
+  if (selectedItemType) {
+    applyColorToItem(selectedItemType, selectedColor);
+  }
+}
+
+function applyColorToItem(itemType, color, element) {
+  itemColors.set(itemType, color);
+  const closetItem = document.querySelector(`.clothing[data-item="${itemType}"]`);
+  closetItem?.style.setProperty('--item-color', color);
+  if (element) {
+    element.style.setProperty('--item-color', color);
+  }
+  const dressedItem = document.querySelector(`.dressed-item.${itemType}`);
+  dressedItem?.style.setProperty('--item-color', color);
+}
+
+colorOptions.forEach((option) => {
+  option.addEventListener('click', () => {
+    setActiveColor(option);
+  });
+});
 
 clothingItems.forEach((item) => {
   item.addEventListener('dragstart', (event) => {
     event.dataTransfer.setData('text/plain', item.dataset.item);
+  });
+
+  item.addEventListener('click', () => {
+    clothingItems.forEach((clothing) => clothing.classList.remove('is-selected'));
+    item.classList.add('is-selected');
+    selectedItemType = item.dataset.item;
+    statusText.textContent = `Coloring the ${selectedItemType}! Pick a color, then dress the doll.`;
   });
 });
 
@@ -49,8 +89,16 @@ dropZones.forEach((zone) => {
     const dressedItem = document.createElement('div');
     dressedItem.className = `dressed-item ${itemType}`;
     dressedItem.textContent = itemType.charAt(0).toUpperCase() + itemType.slice(1);
+    const appliedColor = itemColors.get(itemType) ?? selectedColor;
+    dressedItem.style.setProperty('--item-color', appliedColor);
+    dressedItem.addEventListener('click', () => {
+      applyColorToItem(itemType, selectedColor, dressedItem);
+      statusText.textContent = `${itemType.charAt(0).toUpperCase() + itemType.slice(1)} updated!`;
+    });
     zone.appendChild(dressedItem);
     dressed.add(itemType);
+    selectedItemType = null;
+    clothingItems.forEach((clothing) => clothing.classList.remove('is-selected'));
 
     if (dressed.size === dropZones.length) {
       startBubbles();
@@ -79,6 +127,11 @@ function createBubble() {
   bubble.style.left = `${Math.random() * 80 + 10}%`;
   bubble.style.top = `-${size}px`;
   bubble.dataset.speed = (1.2 + Math.random() * 1.5).toString();
+  const hue = Math.floor(Math.random() * 360);
+  bubble.style.setProperty('--bubble-color', `hsl(${hue} 90% 80%)`);
+  if (Math.random() > 0.5) {
+    bubble.classList.add('bubble--sparkle');
+  }
   bubbleLayer.appendChild(bubble);
   bubbles.add(bubble);
 }
