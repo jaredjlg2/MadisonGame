@@ -16,6 +16,20 @@
       <section class="game__play">
         <aside class="closet" aria-label="Clothes closet">
           <h2>Pick an Outfit</h2>
+          <div class="color-picker" aria-label="Color picker">
+            <p class="color-picker__label">Pick a color</p>
+            <div class="color-picker__options" role="radiogroup" aria-label="Outfit colors">
+              <button class="color-option is-active" type="button" data-color="#ff9fba" aria-pressed="true">
+                Rosy
+              </button>
+              <button class="color-option" type="button" data-color="#8de0ff" aria-pressed="false">
+                Ocean
+              </button>
+              <button class="color-option" type="button" data-color="#c7b7ff" aria-pressed="false">
+                Lilac
+              </button>
+            </div>
+          </div>
           <div class="closet__items">
             <div class="clothing" draggable="true" data-item="hat" aria-label="Hat">
               <span class="clothing__label">Hat</span>
