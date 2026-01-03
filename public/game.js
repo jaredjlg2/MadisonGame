@@ -147,10 +147,17 @@ function dragArm(event) {
   }
   const pointer = getPointerPosition(event);
   const dollRect = document.getElementById('doll').getBoundingClientRect();
+  const bubbleRect = bubbleLayer.getBoundingClientRect();
+  const armWidth = dollArm.offsetWidth;
+  const armHeight = dollArm.offsetHeight;
   const newLeft = pointer.x - dollRect.left - armOffset.x;
   const newTop = pointer.y - dollRect.top - armOffset.y;
-  dollArm.style.left = `${Math.min(Math.max(newLeft, -20), 140)}px`;
-  dollArm.style.top = `${Math.min(Math.max(newTop, 90), 240)}px`;
+  const minLeft = bubbleRect.left - dollRect.left;
+  const maxLeft = bubbleRect.right - dollRect.left - armWidth;
+  const minTop = bubbleRect.top - dollRect.top;
+  const maxTop = bubbleRect.bottom - dollRect.top - armHeight;
+  dollArm.style.left = `${Math.min(Math.max(newLeft, minLeft), maxLeft)}px`;
+  dollArm.style.top = `${Math.min(Math.max(newTop, minTop), maxTop)}px`;
 }
 
 function endArmDrag() {
