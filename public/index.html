@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dress-Up Bubble Pop</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game">
+      <header class="game__header">
+        <h1>Dress-Up Bubble Pop</h1>
+        <p>Drag the clothes onto the doll. When she's dressed, move her arm to pop bubbles!</p>
+      </header>
+
+      <section class="game__play">
+        <aside class="closet" aria-label="Clothes closet">
+          <h2>Pick an Outfit</h2>
+          <div class="closet__items">
+            <div class="clothing" draggable="true" data-item="hat" aria-label="Hat">
+              <span class="clothing__label">Hat</span>
+            </div>
+            <div class="clothing clothing--dress" draggable="true" data-item="dress" aria-label="Dress">
+              <span class="clothing__label">Dress</span>
+            </div>
+            <div class="clothing clothing--shoes" draggable="true" data-item="shoes" aria-label="Shoes">
+              <span class="clothing__label">Shoes</span>
+            </div>
+          </div>
+        </aside>
+
+        <section class="doll-stage" aria-label="Dress the doll">
+          <div class="doll" id="doll">
+            <div class="doll__head">
+              <div class="doll__face">
+                <span class="eye"></span>
+                <span class="eye"></span>
+                <span class="smile"></span>
+              </div>
+              <div class="drop-zone" data-zone="hat" aria-label="Hat spot"></div>
+            </div>
+            <div class="doll__body">
+              <div class="drop-zone" data-zone="dress" aria-label="Dress spot"></div>
+            </div>
+            <div class="doll__legs">
+              <div class="drop-zone" data-zone="shoes" aria-label="Shoes spot"></div>
+            </div>
+            <div class="doll__arm" id="doll-arm" aria-label="Doll arm" role="button">
+              <span class="arm__hand"></span>
+            </div>
+          </div>
+          <div class="bubble-layer" id="bubble-layer" aria-hidden="true"></div>
+        </section>
+      </section>
+
+      <div class="status" id="status">Dress the doll to start popping bubbles!</div>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
